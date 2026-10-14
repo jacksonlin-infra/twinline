@@ -1,0 +1,7 @@
+.claude-plugin/types/
+hooks/**/*.js
+node_modules/
+.DS_Store
+*.log
+.env
+.ci-types/

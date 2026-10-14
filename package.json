@@ -1,0 +1,13 @@
+{
+  "name": "twinline",
+  "private": true,
+  "version": "0.3.0",
+  "license": "MIT",
+  "scripts": {
+    "validate": "claude plugin validate --strict .",
+    "test": "claude plugin test .",
+    "typecheck": "tsc -p .",
+    "check": "npm run validate && npm run test && npm run typecheck"
+  },
+  "devDependencies": { "typescript": "^5.6.0" }
+}

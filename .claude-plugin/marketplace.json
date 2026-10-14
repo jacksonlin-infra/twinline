@@ -1,0 +1,16 @@
+{
+  "name": "twinline",
+  "owner": {
+    "name": "Jacksonlin",
+    "url": "https://github.com/jacksonlin-infra"
+  },
+  "description": "Twinline, a bilingual mode plugin for Claude Code.",
+  "plugins": [
+    {
+      "name": "twinline",
+      "source": "./",
+      "description": "Bilingual mode for Claude Code: write in your language, let Claude work in English, read both side by side.",
+      "category": "productivity"
+    }
+  ]
+}

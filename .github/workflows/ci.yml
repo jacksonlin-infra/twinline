@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # The npm "stable" tag lags behind the 2.1.292 minimum; take "latest",
+      # and fall back to the native installer if npm is unavailable.
+      - name: Install Claude Code
+        run: |
+          if ! npm install -g @anthropic-ai/claude-code@latest; then
+            curl -fsSL https://claude.ai/install.sh | bash
+            echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          fi
+
+      - name: Claude Code version
+        run: claude --version
+
+      # Public tree hygiene: no local machine paths or LAN addresses.
+      - name: No local paths
+        run: "! git grep -nIE '/(Users|Volumes)/|192[.]168[.]'"
+
+      - name: Validate
+        run: claude plugin validate --strict .
+
+      - name: Test
+        run: claude plugin test .
+
+      # The engine writes .claude-plugin/types only when it loads the mod in a
+      # session, which CI cannot do: check against the published declarations,
+      # best effort. Local `tsc -p .` with generated types remains the gate.
+      - name: Type check (best effort)
+        continue-on-error: true
+        run: |
+          npm ci
+          mkdir -p .ci-types
+          curl -fsSL https://raw.githubusercontent.com/anthropics/claude-code/main/mods/types/claude-code.d.ts -o .ci-types/claude-code.d.ts
+          npx tsc -p tsconfig.ci.json

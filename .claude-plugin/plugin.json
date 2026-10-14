@@ -1,0 +1,114 @@
+{
+  "name": "twinline",
+  "displayName": "Twinline",
+  "version": "0.3.0",
+  "description": "Bilingual mode for Claude Code: write in your language, let Claude work in English, read both side by side.",
+  "author": {
+    "name": "Jacksonlin",
+    "url": "https://github.com/jacksonlin-infra"
+  },
+  "homepage": "https://github.com/jacksonlin-infra/twinline",
+  "repository": "https://github.com/jacksonlin-infra/twinline",
+  "license": "MIT",
+  "keywords": [
+    "translation",
+    "bilingual",
+    "i18n",
+    "mod"
+  ],
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "default_enabled": {
+      "type": "boolean",
+      "title": "Enabled by default",
+      "description": "Start every new session with Twinline on.",
+      "default": false
+    },
+    "language": {
+      "type": "string",
+      "title": "Your language",
+      "description": "BCP-47 code of the language you write and read in, e.g. zh-CN, ja, de.",
+      "default": "zh-CN"
+    },
+    "translate_input": {
+      "type": "boolean",
+      "title": "Translate input",
+      "description": "Translate what you type into English before it is sent.",
+      "default": true
+    },
+    "translate_output": {
+      "type": "boolean",
+      "title": "Translate output",
+      "description": "Show a translation under each of Claude's replies.",
+      "default": true
+    },
+    "model": {
+      "type": "string",
+      "title": "Translation model",
+      "description": "Model alias or id used for translation through your Claude Code sign-in.",
+      "default": "haiku"
+    },
+    "glossary": {
+      "type": "string",
+      "title": "Glossary",
+      "description": "One term per entry as source=target, e.g. 工作区=workspace.",
+      "multiple": true
+    },
+    "always_translate_input": {
+      "type": "boolean",
+      "title": "Always translate input",
+      "description": "Also translate input that contains only ASCII letters (needed for languages written in Latin script).",
+      "default": false
+    },
+    "show_band_when_off": {
+      "type": "boolean",
+      "title": "Show band when off",
+      "description": "Keep the Twinline band above the prompt while it is off.",
+      "default": false
+    },
+    "input_timeout_ms": {
+      "type": "number",
+      "title": "Input timeout (ms)",
+      "description": "Give up translating a prompt after this long and send it as typed.",
+      "default": 8000,
+      "min": 1000,
+      "max": 30000
+    },
+    "settle_ms": {
+      "type": "number",
+      "title": "Reply settle time (ms)",
+      "description": "How long a reply block must stay unchanged before it is translated.",
+      "default": 1200,
+      "min": 300,
+      "max": 5000
+    },
+    "backend": {
+      "type": "string",
+      "title": "Backend",
+      "description": "Where translations are computed.",
+      "options": [
+        "claude",
+        "openai",
+        "deepl",
+        "ollama"
+      ],
+      "default": "claude"
+    },
+    "backend_url": {
+      "type": "string",
+      "title": "Backend URL",
+      "description": "Base URL for openai/ollama (e.g. http://localhost:11434/v1) or DeepL API host."
+    },
+    "backend_model": {
+      "type": "string",
+      "title": "Backend model",
+      "description": "Model name for openai/ollama backends."
+    },
+    "backend_key": {
+      "type": "string",
+      "title": "Backend API key",
+      "description": "API key for the external backend. Stored in secure storage.",
+      "sensitive": true
+    }
+  }
+}
