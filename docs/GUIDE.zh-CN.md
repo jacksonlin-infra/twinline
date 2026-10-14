@@ -41,7 +41,7 @@
    | Install for all collaborators on this repository (project scope) | 打开这个项目的所有人 |
    | Install for you, in this repo only (local scope) | 你在这个项目里的会话 |
 
-4. 接着出现 **Configure Twinline** 界面，列出全部选项（见 §3）。改好需要的项后选 **Save configuration**；也可以直接按 Esc，用默认值完成安装，以后再配置。
+4. 接着出现 **Configure Twinline** 界面，列出全部选项（见 §3）。文本和数字项显示为空，但默认值写在名称里（如 *Your language (default zh-CN)*）和底部说明里，空白项会自动使用默认值。改好需要的项（不改也可以）后选 **Save configuration**；也可以直接按 Esc，用默认值完成安装，以后再配置。
 5. 看到 `✓ Installed Twinline. Plugin is now active.` 即安装完成。输入 `/plugin`，确认 mod 一行显示 `1 mod active · twinline`（或包含 `twinline`）。
 
 Desktop：在终端以 user 作用域安装后，新建一个 Code 会话。已经打开的会话不会重新加载。Desktop 应用里，发送 `/twinline` 或 `/tl` 后输入框上方会提示 `/twinline isn't a command here.`，因为 Desktop 不把插件运行时注册的命令当作自己的命令；命令照常执行。（全新会话里，这两个命令要在发出第一条消息、Desktop 启动 Claude Code 之后才出现在 `/` 菜单里。）
@@ -65,7 +65,7 @@ Desktop：在终端以 user 作用域安装后，新建一个 Code 会话。已�
     "options": {
       "language": "ja",
       "glossary": ["工作区=workspace", "提交=commit"],
-      "default_enabled": true
+      "default_enabled": false
     }
   }
 }
@@ -77,14 +77,14 @@ Desktop：在终端以 user 作用域安装后，新建一个 Code 会话。已�
 
 | 选项 | 默认值 | 含义 |
 |---|---|---|
-| `default_enabled` | `false` | 每个新会话都默认开启 |
+| `default_enabled` | `true` | 每个新会话都默认开启 |
 | `language` | `zh-CN` | 你读写所用语言的 BCP-47 代码（见 §6） |
 | `translate_input` | `true` | 把你输入的内容翻译成英文 |
 | `translate_output` | `true` | 在每个回复块下显示译文 |
 | `model` | `haiku` | 翻译所用模型的别名或 id，经你的登录调用 |
 | `glossary` | — | 术语，写成 `原文=译文`（见 §7） |
 | `always_translate_input` | `false` | 只含 ASCII 字母的输入也翻译 |
-| `show_band_when_off` | `false` | 关闭时也保留输入框上方的状态条 |
+| `show_band_when_off` | `true` | 关闭时也保留输入框上方的状态条 |
 | `input_timeout_ms` | `8000` | 输入翻译超过这么久就放弃，按原样发送（1000–30000） |
 | `settle_ms` | `1200` | 回复块保持不变多久后才翻译（300–5000） |
 | `backend` | `claude` | `claude`、`openai`、`deepl`、`ollama`（见 §8） |
@@ -96,7 +96,7 @@ Desktop：在终端以 user 作用域安装后，新建一个 Code 会话。已�
 
 ## 4. 第一次使用
 
-1. 在任意项目里开一个会话，输入 `/twinline on`。会看到 `Twinline ON · 中文→EN · input ✓ output ✓ · model haiku`，输入框上方出现状态条。
+1. 在任意项目里开一个会话。Twinline 已经开启：输入框上方的状态条显示 `Twinline ON · 中文→EN`。（如果把 `default_enabled` 设成了 `false`，输入 `/twinline on` 或点状态条上的 **On** 按钮。）
 2. 用你的语言输入，比如 `帮我看看这个仓库的测试为什么失败`。
 3. 你的消息显示你输入的原文，下面一行灰色的 `EN · …` 就是 Claude 实际收到的英文。
 4. Claude 用英文回答。每个回复块停止变化一两秒后，下方出现译文（终端里是带竖线的引用块，Desktop 里是一个框）；翻译进行中显示 `⇄ translating…`。
@@ -166,13 +166,13 @@ Twinline 依赖 Claude 用英文回答。如果 Claude Code 自身的 `language`
 
 | 现象 | 检查 |
 |---|---|
-| 输入框上方没有状态条 | Twinline 默认关闭：`/twinline on`。想在关闭时也显示状态条，开启 `show_band_when_off`。 |
+| 输入框上方没有状态条 | Twinline 已关闭且 `show_band_when_off` 为 `false`：`/twinline on`，或把 `show_band_when_off` 改回 `true`。 |
 | 我的消息下面没有 `EN · …` 行 | 文本被当成了英文（只含拉丁字母，见 §6）、以 `/` 或 `!` 开头，或输入翻译已关闭（用 `/tl` 查看）。 |
 | 提示 `Twinline: translation failed (api-error), sent as typed` | 登录可能已过期（运行 `/login`），或组织策略禁用了该模型（试试 `/tl model sonnet`）。每个会话只提示一次。 |
 | 提示 `… translation failed (timeout) …` | 模型用时超过 `input_timeout_ms`；调大这个值，或重试。 |
 | 回复没有译文 | 输出翻译已关闭（`/tl`）；Claude 直接用你的语言回答了（Claude Code 自身的 `language` 设置，见 §6）；这条回复是恢复会话后重新绘制的历史；Desktop 里两次工具调用之间的文字不会交给插件。 |
 | 某条译文看起来不对 | `/twinline status` 会显示失败次数；译文会跨会话缓存，改了术语表或语言后，对新文本生效。 |
-| Desktop 提示 `/twinline isn't a command here.` | Desktop 上属于预期现象（见 §2）：命令已经执行，看它的输出行和状态条即可。可以用状态条按钮切换，不用命令；开启 `default_enabled` 让新会话直接开启 Twinline。 |
+| Desktop 提示 `/twinline isn't a command here.` | Desktop 上属于预期现象（见 §2）：命令已经执行，看它的输出行和状态条即可。可以用状态条按钮切换，不用命令。 |
 | Twinline 完全没反应 | `/plugin` 的已启用 mod 里应该有 `twinline`。运行 `claude --debug-file ./twinline.log`，复现问题，在日志里找含 `twinline` 的行（`hook skipped` 或 `refused` 会说明原因）。 |
 | 好像加载了两份 | `CLAUDE_CODE_PLUGIN_DIRS` 或 `--plugin-dir` 指向的开发目录会替换同名的已安装版本。 |
 

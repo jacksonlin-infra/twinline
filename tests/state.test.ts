@@ -50,6 +50,7 @@ test('loads the default session on first start', async ($, on) => {
   const state = trackState(on)
   await $.session.start({ surface: 'terminal', isInteractive: true, cwd: '/work' })
   expect(state('session')).toEqual(defaultSession(fromOptions({}), clock.now()))
+  expect((state('session') as SessionConfig).enabled).toBe(true)
 })
 
 test('loads the stored session config when one exists', async ($, on) => {

@@ -3,14 +3,14 @@ import { bandLabel, defaultSession, fromOptions, languageName } from '../hooks/l
 
 test('returns defaults when options are empty', () => {
   expect(fromOptions({})).toEqual({
-    defaultEnabled: false,
+    defaultEnabled: true,
     language: 'zh-CN',
     translateInput: true,
     translateOutput: true,
     model: 'haiku',
     glossary: [],
     alwaysTranslateInput: false,
-    showBandWhenOff: false,
+    showBandWhenOff: true,
     inputTimeoutMs: 8000,
     outputTimeoutMs: 20000,
     settleMs: 1200,

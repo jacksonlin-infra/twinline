@@ -72,7 +72,7 @@ test('turns Twinline on, saves the session and asks the model to keep answering 
   expect(toasts).toEqual(['Twinline on'])
 })
 
-test('reports off, input, output, language and model changes through /tl', async ($, on) => {
+test('reports off, input, output, language and model changes through /tl', { options: { default_enabled: false } }, async ($, on) => {
   mock.store(on)
   const { state } = stubEngine(on)
   await start($)

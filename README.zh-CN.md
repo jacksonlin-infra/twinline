@@ -26,9 +26,9 @@ Desktop 应用的 Code 标签页：
 
 按 `y` 添加 marketplace，再选择作用域（选用户作用域则每个会话都会加载，包括 Desktop 应用的本地会话）。
 
-每个新会话里 Twinline 默认**关闭**，用 `/twinline on` 开启。
+每个新会话里 Twinline 默认**开启**，输入框上方的状态条可以一键关闭和开启（也可以用 `/twinline off`）。想让新会话默认关闭，把 `default_enabled` 设为 `false`。
 
-安装界面可以设置全部选项；以后在 `/plugin` → **Installed** → **twinline** → **Configure options** 修改。分步的安装、配置、语言、后端与故障排查说明见 **[使用指南](docs/GUIDE.zh-CN.md)**。
+安装界面可以设置全部选项。文本和数字项在那里显示为空，但每项的默认值写在名称和底部说明里；选 **Save configuration** 时空白项会自动使用默认值，所以不改任何项直接保存即可。以后在 `/plugin` → **Installed** → **twinline** → **Configure options** 修改。分步的安装、配置、语言、后端与故障排查说明见 **[使用指南](docs/GUIDE.zh-CN.md)**。
 
 ## 命令
 
@@ -57,14 +57,14 @@ Desktop 应用的 Code 标签页：
 
 | 选项 | 默认值 | 含义 |
 |---|---|---|
-| `default_enabled` | `false` | 每个新会话都默认开启 |
+| `default_enabled` | `true` | 每个新会话都默认开启 |
 | `language` | `zh-CN` | 你读写所用语言的 BCP-47 代码。`zh-TW`/`zh-HK` 用繁體字与台灣/香港用語；`ja` 用です・ます体与片假名术语 |
 | `translate_input` | `true` | 把你输入的内容翻译成英文 |
 | `translate_output` | `true` | 在每个回复块下显示译文 |
 | `model` | `haiku` | 翻译所用模型的别名或 id，经你现有的 Claude Code 登录调用 |
 | `glossary` | — | 术语，写成 `原文=译文`，如 `工作区=workspace`（双向生效） |
 | `always_translate_input` | `false` | 只含 ASCII 字母的输入也翻译（拉丁字母书写的语言需要） |
-| `show_band_when_off` | `false` | 关闭时也保留输入框上方的状态条 |
+| `show_band_when_off` | `true` | 关闭时也保留输入框上方的状态条 |
 | `input_timeout_ms` | `8000` | 输入翻译超过这么久就放弃，按原样发送 |
 | `settle_ms` | `1200` | 回复块保持不变多久后才翻译 |
 | `backend` | `claude` | 翻译在哪里完成：`claude`、`openai`、`deepl`、`ollama` |
@@ -87,7 +87,7 @@ Twinline 依赖模型用英文回答。如果 Claude Code 自身的 `language` �
 已知限制：
 
 - Desktop 应用里，Claude 在两次工具调用之间写的文字不会交给插件，因此没有译文。
-- Desktop 应用里，发送 `/twinline` 或 `/tl` 后输入框上方会提示 `/twinline isn't a command here.`：Desktop 不把插件运行时注册的命令当作自己的命令。命令照常执行（输出和状态条都会正常更新）。状态条上的按钮不需要命令就能切换；开启 `default_enabled` 可让新会话直接开启。
+- Desktop 应用里，发送 `/twinline` 或 `/tl` 后输入框上方会提示 `/twinline isn't a command here.`：Desktop 不把插件运行时注册的命令当作自己的命令。命令照常执行（输出和状态条都会正常更新）。状态条上的按钮不需要命令就能切换。
 - 只翻译进行中的回合里的回复。之后重新绘制的历史（`/resume`、重新打开 Desktop 会话、滚动）显示已保存的译文，但不会发起新的翻译。
 - URL 后面不加空格直接跟标点时，标点可能被当成 URL 的一部分。
 
