@@ -6,6 +6,15 @@ All notable changes to Twinline are recorded here. The format follows
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-14
+
+### Changed
+- Twinline now starts **on** in every new session (`default_enabled` defaults to `true`), so it works right after installing with nothing to configure.
+- The band above the prompt stays visible while Twinline is off (`show_band_when_off` defaults to `true`), showing `Twinline OFF` with an **On** button instead of disappearing.
+- The install screen shows text and number fields blank even when they have defaults. Their names now carry the default (`Your language (default zh-CN)`, `Translation model (default haiku)`, `Input timeout, ms (default 8000)`, `Reply settle time, ms (default 1200)`), every option's help line ends with its default, and the README and guide say that a blank field uses its default, so the screen can be saved as is.
+
+To keep the 0.3 behaviour, set `default_enabled` and `show_band_when_off` to `false` in `/config` or `/plugin` → **Installed** → **twinline** → **Configure options**.
+
 ## [0.3.0] - 2026-10-14
 
 First public release. 0.1.0 and 0.2.0 were not published; their notes are kept below.
@@ -40,5 +49,6 @@ First public release. 0.1.0 and 0.2.0 were not published; their notes are kept b
 - Translations of reply blocks once they settle, only for live turns.
 - `/twinline` (`/tl`) commands, a band above the prompt with one-key toggles, and session settings that survive `/clear`, `/resume` and `/branch`.
 
-[Unreleased]: https://github.com/jacksonlin-infra/twinline/compare/twinline--v0.3.0...HEAD
+[Unreleased]: https://github.com/jacksonlin-infra/twinline/compare/twinline--v0.4.0...HEAD
+[0.4.0]: https://github.com/jacksonlin-infra/twinline/releases/tag/twinline--v0.4.0
 [0.3.0]: https://github.com/jacksonlin-infra/twinline/releases/tag/twinline--v0.3.0

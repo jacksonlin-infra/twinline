@@ -8,7 +8,7 @@ const REPLY = 'The tests fail because a fixture is stale.'
 const ZH_REPLY = '测试失败是因为一个夹具过期了。'
 const SURFACES = ['terminal', 'desktop'] as const
 
-test('switch on, send Chinese, read both rows side by side', async ($, on) => {
+test('switch on, send Chinese, read both rows side by side', { options: { default_enabled: false, show_band_when_off: false } }, async ($, on) => {
   const { clock, toasts } = engine(on)
   const sent: string[] = []
   on('prompt.submit', ($: unknown, e: { text: string }) => { sent.push(e.text); return { text: e.text } })
@@ -24,7 +24,7 @@ test('switch on, send Chinese, read both rows side by side', async ($, on) => {
     viewport: { columns: 100, rows: 30 }, props: { hasSurvey: false, isWorking: false, maxRows: 5, bodyColumns: 100, scroll: { offset: 0, bodyRows: 20 }, view: {} },
   })
 
-  // 1: a new session is off and shows no band.
+  // 1: with both switches turned off, a new session is off and shows no band.
   await start($)
   for (const surface of SURFACES) {
     const b = await band(surface)

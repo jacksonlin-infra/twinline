@@ -26,9 +26,9 @@ In a terminal session:
 
 Answer `y` to add the marketplace, then choose a scope (user scope loads it in every session, including the Desktop app's local sessions).
 
-Twinline starts **off** in every new session. Turn it on with `/twinline on`.
+Twinline starts **on** in every new session, with a band above the prompt to switch it off and on (or `/twinline off`). To start sessions off, set `default_enabled` to `false`.
 
-The install screen lets you set every option; change them later with `/plugin` → **Installed** → **twinline** → **Configure options**. Step-by-step install, configuration, languages, backends and troubleshooting: **[Guide](docs/GUIDE.md)**.
+The install screen lets you set every option. Text and number fields show blank there, but each one's default is in its name and help line, and a blank field uses that default when you choose **Save configuration**, so you can save the screen as is. Change options later with `/plugin` → **Installed** → **twinline** → **Configure options**. Step-by-step install, configuration, languages, backends and troubleshooting: **[Guide](docs/GUIDE.md)**.
 
 ## Commands
 
@@ -57,14 +57,14 @@ Global defaults live in the plugin's options (`/config` in a session, or the ins
 
 | Option | Default | Meaning |
 |---|---|---|
-| `default_enabled` | `false` | Start every new session with Twinline on |
+| `default_enabled` | `true` | Start every new session with Twinline on |
 | `language` | `zh-CN` | BCP-47 code of the language you write and read in. `zh-TW`/`zh-HK` get Traditional characters with Taiwan/Hong Kong terminology; `ja` gets polite form with katakana terms |
 | `translate_input` | `true` | Translate what you type into English |
 | `translate_output` | `true` | Show a translation under each reply block |
 | `model` | `haiku` | Model alias or id used for translation through your Claude Code sign-in |
 | `glossary` | — | Terms as `source=target`, e.g. `工作区=workspace` (applied both ways) |
 | `always_translate_input` | `false` | Also translate input written only in ASCII letters (for languages in Latin script) |
-| `show_band_when_off` | `false` | Keep the band above the prompt while Twinline is off |
+| `show_band_when_off` | `true` | Keep the band above the prompt while Twinline is off |
 | `input_timeout_ms` | `8000` | Give up translating a prompt after this long and send it as typed |
 | `settle_ms` | `1200` | How long a reply block must stay unchanged before it is translated |
 | `backend` | `claude` | Where translations are computed: `claude`, `openai`, `deepl`, `ollama` |
@@ -87,7 +87,7 @@ Not translated: slash commands, `!` shell escapes, input that is already English
 Known limitations:
 
 - In the Desktop app, text Claude writes between two tool calls is not offered to plugins, so it gets no translation.
-- In the Desktop app, sending `/twinline` or `/tl` shows `/twinline isn't a command here.` above the prompt: the app does not treat commands that plugins register at run time as its own. The command still runs (its output and the band update as usual). The band's buttons switch Twinline without a command, and `default_enabled` starts sessions with it on.
+- In the Desktop app, sending `/twinline` or `/tl` shows `/twinline isn't a command here.` above the prompt: the app does not treat commands that plugins register at run time as its own. The command still runs (its output and the band update as usual). The band's buttons switch Twinline without a command.
 - Replies are translated while a turn is live. History drawn again later (after `/resume`, reopening a Desktop session, scrolling) shows saved translations but does not start new ones.
 - A URL directly followed by punctuation without a space can take that punctuation with it.
 

@@ -51,14 +51,14 @@ function backendOf(v: unknown): Backend {
 
 export function fromOptions(options: Readonly<Record<string, unknown>>): GlobalConfig {
   return {
-    defaultEnabled: bool(options.default_enabled, false),
+    defaultEnabled: bool(options.default_enabled, true),
     language: text(options.language, 'zh-CN'),
     translateInput: bool(options.translate_input, true),
     translateOutput: bool(options.translate_output, true),
     model: text(options.model, 'haiku'),
     glossary: list(options.glossary),
     alwaysTranslateInput: bool(options.always_translate_input, false),
-    showBandWhenOff: bool(options.show_band_when_off, false),
+    showBandWhenOff: bool(options.show_band_when_off, true),
     inputTimeoutMs: num(options.input_timeout_ms, 8000, 1000, 30000),
     outputTimeoutMs: OUTPUT_TIMEOUT_MS,
     settleMs: num(options.settle_ms, 1200, 300, 5000),

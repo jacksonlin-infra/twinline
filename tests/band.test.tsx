@@ -17,7 +17,7 @@ function mount($: any, surface: Surface, bodyColumns = 100) {
   })
 }
 
-test('stays out of the way while off unless asked to show', async ($, on) => {
+test('stays out of the way while off when show_band_when_off is turned off', { options: { show_band_when_off: false } }, async ($, on) => {
   engine(on, withSession({ ...ON, enabled: false }))
   otherBands(on)
   await start($)
@@ -85,7 +85,7 @@ test('keeps the bands other plugins draw', async ($, on) => {
   }
 })
 
-test('shows an OFF band with an On button when show_band_when_off is set', { options: { show_band_when_off: true } }, async ($, on) => {
+test('shows an OFF band with an On button by default', async ($, on) => {
   engine(on, withSession({ ...ON, enabled: false }))
   otherBands(on)
   await start($)

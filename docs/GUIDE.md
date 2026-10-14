@@ -41,7 +41,7 @@ Installing is done from a **terminal** session; the Desktop app's Code tab does 
    | Install for all collaborators on this repository (project scope) | everyone who opens this project |
    | Install for you, in this repo only (local scope) | your sessions in this project |
 
-4. The **Configure Twinline** screen lists every option (§3). Change what you need, then choose **Save configuration**; or press Esc to install with the defaults and configure later.
+4. The **Configure Twinline** screen lists every option (§3). Text and number fields show blank, but each one's default is in its name, e.g. *Your language (default zh-CN)*, and in the help line at the bottom; a blank field uses that default. Change what you need (or nothing), then choose **Save configuration**; or press Esc to install with the defaults and configure later.
 5. You see `✓ Installed Twinline. Plugin is now active.` Type `/plugin` and check that the mods line reads `1 mod active · twinline` (or includes `twinline`).
 
 Desktop: after installing at user scope, start a **new** Code session; existing sessions keep what they loaded. In the Desktop app, sending `/twinline` or `/tl` shows `/twinline isn't a command here.` above the prompt, because the app does not treat commands that plugins register at run time as its own; the command still runs. (In a brand-new session the commands also appear in the `/` menu only after the first message, when the app starts Claude Code.)
@@ -65,7 +65,7 @@ Example `settings.json` block:
     "options": {
       "language": "ja",
       "glossary": ["工作区=workspace", "提交=commit"],
-      "default_enabled": true
+      "default_enabled": false
     }
   }
 }
@@ -77,14 +77,14 @@ All options:
 
 | Option | Default | Meaning |
 |---|---|---|
-| `default_enabled` | `false` | Start every new session with Twinline on |
+| `default_enabled` | `true` | Start every new session with Twinline on |
 | `language` | `zh-CN` | BCP-47 code of the language you write and read in (§6) |
 | `translate_input` | `true` | Translate what you type into English |
 | `translate_output` | `true` | Show a translation under each reply block |
 | `model` | `haiku` | Model alias or id used for translation through your sign-in |
 | `glossary` | — | Terms as `source=target` (§7) |
 | `always_translate_input` | `false` | Also translate input written only in ASCII letters |
-| `show_band_when_off` | `false` | Keep the band above the prompt while Twinline is off |
+| `show_band_when_off` | `true` | Keep the band above the prompt while Twinline is off |
 | `input_timeout_ms` | `8000` | Give up translating a prompt after this long and send it as typed (1000–30000) |
 | `settle_ms` | `1200` | How long a reply block must stay unchanged before it is translated (300–5000) |
 | `backend` | `claude` | `claude`, `openai`, `deepl`, `ollama` (§8) |
@@ -96,7 +96,7 @@ Changing an option reloads Twinline; the change applies right away.
 
 ## 4. First run
 
-1. In any project, start a session and enter `/twinline on`. You see `Twinline ON · 中文→EN · input ✓ output ✓ · model haiku`, and a band above the prompt.
+1. In any project, start a session. Twinline is already on: the band above the prompt reads `Twinline ON · 中文→EN`. (If you set `default_enabled` to `false`, enter `/twinline on` or press the band's **On** button.)
 2. Type in your language, for example `帮我看看这个仓库的测试为什么失败`.
 3. Your message shows what you typed, with a dim `EN · …` line under it: that English is what Claude received.
 4. Claude answers in English. A second or two after each reply block stops changing, a translation appears under it (a quoted block in the terminal, a box in the Desktop app); while it is on its way you see `⇄ translating…`.
@@ -166,13 +166,13 @@ Each request waits at most 15 seconds. `/twinline status` shows the backend and 
 
 | Symptom | Check |
 |---|---|
-| No band above the prompt | Twinline starts off: `/twinline on`. To see the band while off, set `show_band_when_off`. |
+| No band above the prompt | Twinline is off and `show_band_when_off` is `false`: `/twinline on`, or set `show_band_when_off` back to `true`. |
 | No `EN · …` line under my message | The text looked English (Latin letters only; see §6), started with `/` or `!`, or input translation is off (`/tl`). |
 | `Twinline: translation failed (api-error), sent as typed` | Your sign-in may have expired (run `/login`), or your organization blocks the model (try `/tl model sonnet`). Twinline shows this once per session. |
 | `… translation failed (timeout) …` | The model took longer than `input_timeout_ms`; raise it, or try again. |
 | Replies have no translation | Output translation off (`/tl`); Claude answered in your language (Claude Code's own `language` setting, §6); the reply is history redrawn after a resume; in the Desktop app, text between two tool calls is not offered to plugins. |
 | A reply translation looks wrong | `/twinline status` shows failures; translations are cached across sessions, so a fixed glossary or language applies to new text. |
-| Desktop: `/twinline isn't a command here.` | Expected in the Desktop app (see §2): the command still ran; check its output line and the band. Use the band's buttons to switch without commands, and `default_enabled` to start sessions with Twinline on. |
+| Desktop: `/twinline isn't a command here.` | Expected in the Desktop app (see §2): the command still ran; check its output line and the band. Use the band's buttons to switch without commands. |
 | Twinline does nothing at all | `/plugin` should list `twinline` among active mods. Run `claude --debug-file ./twinline.log`, reproduce, and look for lines containing `twinline` (a `hook skipped` or `refused` line says why). |
 | Two copies seem loaded | A development checkout in `CLAUDE_CODE_PLUGIN_DIRS` or `--plugin-dir` replaces the installed copy of the same name. |
 
