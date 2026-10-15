@@ -156,6 +156,8 @@ By default translations go through Claude with your sign-in. You can send them e
 
 Each request waits at most 15 seconds. `/twinline status` shows the backend and host.
 
+A full walkthrough using OpenRouter as the example (where to enter the API key, how to check it works, common errors): [Using OpenRouter as the translation backend](OPENROUTER.md).
+
 ## 9. Update and uninstall
 
 - **Update:** `/plugin` → **Installed** → **twinline** → **Update now**, or `claude plugin update twinline@twinline` in a shell; then restart Claude Code (or start a new session).

@@ -137,6 +137,7 @@ For the Desktop app, add the checkout's absolute path to `CLAUDE_CODE_PLUGIN_DIR
 | Document | For |
 |---|---|
 | [Guide](docs/GUIDE.md) · [使用指南](docs/GUIDE.zh-CN.md) | Install, configure, languages, glossary, backends, update, troubleshooting, FAQ |
+| [OpenRouter backend](docs/OPENROUTER.md) · [OpenRouter 后端](docs/OPENROUTER.zh-CN.md) | Translating through a third-party model via OpenRouter (or any OpenAI-compatible API) |
 | [Changelog](CHANGELOG.md) | What changed in each version |
 | [Contributing](CONTRIBUTING.md) | Reporting bugs, sending changes, checking a build |
 | [Security](SECURITY.md) | Reporting a vulnerability privately |
@@ -146,3 +147,13 @@ For the Desktop app, add the checkout's absolute path to `CLAUDE_CODE_PLUGIN_DIR
 [MIT](LICENSE) © 2026 Jacksonlin
 
 Twinline is an independent project, not affiliated with or endorsed by Anthropic. Claude and Claude Code are trademarks of Anthropic, PBC.
+
+## Star History
+
+<a href="https://www.star-history.com/#jacksonlin-infra/twinline&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=jacksonlin-infra/twinline&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=jacksonlin-infra/twinline&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=jacksonlin-infra/twinline&type=Date" />
+ </picture>
+</a>

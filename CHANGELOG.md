@@ -6,6 +6,10 @@ All notable changes to Twinline are recorded here. The format follows
 
 ## [Unreleased]
 
+### Added
+- A step-by-step guide for translating through OpenRouter (or any OpenAI-compatible API) with the `openai` backend, with recommended models: [English](docs/OPENROUTER.md) · [中文](docs/OPENROUTER.zh-CN.md).
+- A star-history chart at the end of the README.
+
 ## [0.4.0] - 2026-10-14
 
 ### Changed

@@ -137,6 +137,7 @@ Desktop 应用：在 `~/.claude/settings.json` 的 `env` 块里把源码目录�
 | 文档 | 用途 |
 |---|---|
 | [使用指南](docs/GUIDE.zh-CN.md) · [Guide](docs/GUIDE.md) | 安装、配置、语言、术语表、外部后端、更新、故障排查、常见问题 |
+| [OpenRouter 后端](docs/OPENROUTER.zh-CN.md) · [OpenRouter backend](docs/OPENROUTER.md) | 通过 OpenRouter（或任何 OpenAI 兼容接口）用第三方模型翻译 |
 | [更新日志](CHANGELOG.md) | 每个版本的变化 |
 | [参与贡献](CONTRIBUTING.md)（英文） | 报告问题、提交修改、验证一个版本 |
 | [安全](SECURITY.md)（英文） | 私下报告安全漏洞 |
@@ -146,3 +147,13 @@ Desktop 应用：在 `~/.claude/settings.json` 的 `env` 块里把源码目录�
 [MIT](LICENSE) © 2026 Jacksonlin
 
 Twinline 是独立项目，与 Anthropic 没有关联，也未获其背书。Claude 和 Claude Code 是 Anthropic, PBC 的商标。
+
+## Star 趋势
+
+<a href="https://www.star-history.com/#jacksonlin-infra/twinline&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=jacksonlin-infra/twinline&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=jacksonlin-infra/twinline&type=Date" />
+   <img alt="Star 趋势图" src="https://api.star-history.com/svg?repos=jacksonlin-infra/twinline&type=Date" />
+ </picture>
+</a>

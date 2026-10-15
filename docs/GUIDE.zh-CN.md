@@ -156,6 +156,8 @@ Twinline 依赖 Claude 用英文回答。如果 Claude Code 自身的 `language`
 
 每个请求最多等 15 秒。`/twinline status` 会显示后端和主机。
 
+以 OpenRouter 为例的完整配置步骤（含 API key 在哪里填、怎么确认生效、常见报错）：[用 OpenRouter 做翻译后端](OPENROUTER.zh-CN.md)。
+
 ## 9. 更新与卸载
 
 - **更新：** `/plugin` → **Installed** → **twinline** → **Update now**，或在 shell 里运行 `claude plugin update twinline@twinline`；然后重启 Claude Code（或新开会话）。
