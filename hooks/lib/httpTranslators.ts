@@ -31,6 +31,16 @@ function trimSlash(url: string): string {
   return url.replace(/\/+$/, '')
 }
 
+/** OpenCode Go refuses a request without x-opencode-session (HTTP 400 MissingSessionID). */
+function isOpencode(url: string): boolean {
+  try {
+    const host = new URL(url).hostname
+    return host === 'opencode.ai' || host.endsWith('.opencode.ai')
+  } catch {
+    return false
+  }
+}
+
 /** Where an external backend sends text (host only), or undefined for Claude. */
 export function backendHost(cfg: BackendOptions, options: Readonly<Record<string, unknown>>): string | undefined {
   if (cfg.backend === 'claude') return undefined
@@ -47,8 +57,12 @@ export function translatorFor(cfg: BackendOptions, options: Readonly<Record<stri
     case 'claude':
       return claudeTranslator
     case 'openai':
-    case 'ollama':
-      return openaiTranslator({ url: cfg.backendUrl || DEFAULT_URL[cfg.backend] || '', model: cfg.backendModel, key: keyOf(options), name: cfg.backend })
+    case 'ollama': {
+      const url = cfg.backendUrl || DEFAULT_URL[cfg.backend] || ''
+      // One random id per load (a session); never the Claude Code session id.
+      const sessionId = isOpencode(url) ? crypto.randomUUID() : undefined
+      return openaiTranslator({ url, model: cfg.backendModel, key: keyOf(options), name: cfg.backend, sessionId })
+    }
     case 'deepl':
       return deeplTranslator({ url: cfg.backendUrl, key: keyOf(options) })
   }
@@ -97,7 +111,7 @@ async function request(io: TranslateIo, url: string, init: HttpInit, timeoutMs: 
   return { ok: true, body: parse(res.text) }
 }
 
-export function openaiTranslator(conf: { url: string; model: string; key: string; name?: 'openai' | 'ollama' }): Translator {
+export function openaiTranslator(conf: { url: string; model: string; key: string; name?: 'openai' | 'ollama'; sessionId?: string }): Translator {
   return {
     name: conf.name ?? 'openai',
     async translate(io, req) {
@@ -105,6 +119,7 @@ export function openaiTranslator(conf: { url: string; model: string; key: string
       if (conf.model === '') return { ok: false, reason: 'network', detail: 'backend_model is not set' }
       const headers: Record<string, string> = { 'Content-Type': 'application/json' }
       if (conf.key !== '') headers.Authorization = `Bearer ${conf.key}`
+      if (conf.sessionId !== undefined) headers['x-opencode-session'] = conf.sessionId
       const body = {
         model: conf.model,
         messages: [

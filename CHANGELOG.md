@@ -6,9 +6,14 @@ All notable changes to Twinline are recorded here. The format follows
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-16
+
 ### Added
 - A step-by-step guide for translating through OpenRouter (or any OpenAI-compatible API) with the `openai` backend, with recommended models: [English](docs/OPENROUTER.md) · [中文](docs/OPENROUTER.zh-CN.md).
 - A star-history chart at the end of the README.
+
+### Fixed
+- The `openai` backend now works with OpenCode Go (`https://opencode.ai/zen/go/v1`). OpenCode refuses requests without an `x-opencode-session` header (`HTTP 400`), so Twinline sends one, a random ID drawn once per session, to `opencode.ai` only. Requests to other hosts are unchanged.
 
 ## [0.4.0] - 2026-10-14
 
@@ -53,6 +58,7 @@ First public release. 0.1.0 and 0.2.0 were not published; their notes are kept b
 - Translations of reply blocks once they settle, only for live turns.
 - `/twinline` (`/tl`) commands, a band above the prompt with one-key toggles, and session settings that survive `/clear`, `/resume` and `/branch`.
 
-[Unreleased]: https://github.com/jacksonlin-infra/twinline/compare/twinline--v0.4.0...HEAD
+[Unreleased]: https://github.com/jacksonlin-infra/twinline/compare/twinline--v0.5.0...HEAD
+[0.5.0]: https://github.com/jacksonlin-infra/twinline/releases/tag/twinline--v0.5.0
 [0.4.0]: https://github.com/jacksonlin-infra/twinline/releases/tag/twinline--v0.4.0
 [0.3.0]: https://github.com/jacksonlin-infra/twinline/releases/tag/twinline--v0.3.0

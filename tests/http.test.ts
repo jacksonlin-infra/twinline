@@ -112,6 +112,44 @@ test('translates input through the configured backend and says where it goes', {
   expect(logs.join('\n')).not.toContain(KEY)
 })
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+const opencode = (url = 'https://opencode.ai/zen/go/v1') => fromOptions({ backend: 'openai', backend_url: url, backend_model: 'deepseek-v4.1-flash' })
+
+test('sends OpenCode Go one random session id, the same on every request', async () => {
+  const { io, requests } = httpIo(() => json(200, { choices: [{ message: { content: 'Hello' } }] }))
+  const t = translatorFor(opencode(), { backend_key: KEY })
+  await t.translate(io, REQ)
+  await t.translate(io, REQ)
+  const ids = requests.map(r => r.init.headers?.['x-opencode-session'])
+  expect(ids[0]).toMatch(UUID)
+  expect(ids[1]).toBe(ids[0])
+  expect(requests[0]?.init.headers).toEqual({ 'Content-Type': 'application/json', Authorization: `Bearer ${KEY}`, 'x-opencode-session': ids[0] })
+  const other = httpIo(() => json(200, { choices: [{ message: { content: 'Hello' } }] }))
+  await translatorFor(opencode('https://opencode.ai/inference/go/openai/v1'), { backend_key: KEY }).translate(other.io, REQ)
+  expect(other.requests[0]?.init.headers?.['x-opencode-session']).toMatch(UUID)
+  expect(other.requests[0]?.init.headers?.['x-opencode-session']).not.toBe(ids[0])
+})
+
+test('sends no session id to hosts other than OpenCode', async () => {
+  for (const url of ['https://openrouter.ai/api/v1', 'https://notopencode.ai/v1', 'https://opencode.ai.example.com/v1']) {
+    const { io, requests } = httpIo(() => json(200, { choices: [{ message: { content: 'Hello' } }] }))
+    await translatorFor(opencode(url), { backend_key: KEY }).translate(io, REQ)
+    expect(requests[0]?.init.headers).toEqual({ 'Content-Type': 'application/json', Authorization: `Bearer ${KEY}` })
+  }
+})
+
+test('the session id reaches $.http.fetch for an OpenCode Go backend', { options: { backend: 'openai', backend_url: 'https://opencode.ai/zen/go/v1', backend_model: 'deepseek-v4.1-flash', backend_key: KEY } }, async ($, on) => {
+  engine(on, withSession(ON))
+  const inits: (HttpInit | undefined)[] = []
+  on('http.fetch', ($: unknown, e: { url: string; init?: HttpInit }) => { inits.push(e.init); return { value: json(200, { choices: [{ message: { content: 'Hello' } }] }) } })
+  const sent: string[] = []
+  on('prompt.submit', ($: unknown, e: { text: string }) => { sent.push(e.text); return { text: e.text } })
+  await start($)
+  await $.prompt.submit({ text: '你好', wait: false, origin: { kind: 'composer' } })
+  expect(sent).toEqual(['Hello'])
+  expect(inits[0]?.headers?.['x-opencode-session']).toMatch(UUID)
+})
+
 test('extracts the translation block from an OpenAI-compatible reply', async () => {
   const { io } = httpIo(() => json(200, { choices: [{ message: { content: 'Sure.\n<translation>你好</translation>' } }] }))
   const r = await openaiTranslator({ url: 'http://x/v1', model: 'm', key: '' }).translate(io, { ...REQ, text: 'Hello', direction: 'to-native', to: 'zh-CN' })
